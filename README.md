@@ -4,3 +4,6 @@ Será possível: * Criar conta; * Listar contas; * Excluir uma conta; * Deposita
 
 Mensagens de erros serão enviadas sempre que uma requisição falhar;
 
+Bibliotecas utilizadas: 
+* Express; 
+* -D nodemon ( utilizando o -D para dependência de desenvolvimento)

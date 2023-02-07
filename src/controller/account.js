@@ -1,5 +1,4 @@
-let { bank, account, idSerial, withdraw, deposit, transfers } = require('../database');
-
+let { account, idSerial, withdraw, deposit, transfers } = require('../database');
 
 const newAccounts = (req, res) => {
     const { name, email, cpf, birthdate, phone, password } = req.body
@@ -28,6 +27,8 @@ const listAccounts = (req, res) => {
 }
 const updateAccount = (req, res) => {
     const { name, email, cpf, birthdate, phone, password } = req.body
+
+    const verifyNumberAccount = account.find(selectAccount => selectAccount.number === Number(numberAccount));
 
     verifyNumberAccount.user = {
         name,
@@ -63,7 +64,6 @@ const extract = (req, res) => {
     const transfersSend = transfers.filter(selectTransfers => Number(selectTransfers.numberAccountOrigin) === Number(numberAccount));
 
     const transfersReceived = transfers.filter(selectTransfers => Number(selectTransfers.numberAccountDestiny) === Number(numberAccount));
-
 
     return res.json({
         Depositos: deposits,

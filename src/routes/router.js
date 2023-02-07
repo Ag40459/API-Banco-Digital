@@ -1,7 +1,7 @@
 const express = require('express');
 const { listAccounts, newAccounts, updateAccount, deleteAccount, balance, extract } = require('../controller/account');
 const { newDeposit, newWithdraw, newTransfers } = require('../controller/transactions');
-const { authenticationNewAccount, authenticationListAccount, authenticationUpdateAccount, authenticationBalanceAccount, authenticationExtractAccount, authenticationDeleteAccount, authenticationTransactionsDeposit, authenticationTransactionsWithdraw } = require('../intermediary/authentication');
+const { authenticationNewAccount, authenticationListAccount, authenticationUpdateAccount, authenticationBalanceAccount, authenticationExtractAccount, authenticationDeleteAccount, authenticationTransactionsDeposit, authenticationTransactionsWithdraw, authenticationTransactionsTranfers } = require('../intermediary/authentication');
 const router = express();
 
 router.post('/accounts', authenticationNewAccount, newAccounts);
@@ -13,6 +13,6 @@ router.delete('/accounts/:numberAccount', authenticationDeleteAccount, deleteAcc
 
 router.post('/transactions/deposit', authenticationTransactionsDeposit, newDeposit);
 router.post('/transactions/withdraw', authenticationTransactionsWithdraw, newWithdraw);
-router.post('/transactions/transfers', newTransfers);
+router.post('/transactions/transfers', authenticationTransactionsTranfers, newTransfers);
 
 module.exports = router;

@@ -1,3 +1,4 @@
+let { bank, account } = require('../database');
 const { validateCPF } = require("../functions/validateCPF");
 const { validateEmail } = require("../functions/validateEmail");
 

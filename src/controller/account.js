@@ -124,8 +124,11 @@ const extract = (req, res) => {
         return res.status(400).json({ message: 'Login ou senha inválido!' })
     }
     const deposits = deposit.filter(selectDeposit => Number(selectDeposit.numberAccount) === Number(numberAccount));
+
     const withdraws = withdraw.filter(selectWithdraw => Number(selectWithdraw.numberAccount) === Number(numberAccount));
+
     const transfersSend = transfers.filter(selectTransfers => Number(selectTransfers.numberAccountOrigin) === Number(numberAccount));
+
     const transfersReceived = transfers.filter(selectTransfers => Number(selectTransfers.numberAccountDestiny) === Number(numberAccount));
 
 

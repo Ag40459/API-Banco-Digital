@@ -7,3 +7,4 @@ Mensagens de erros serão enviadas sempre que uma requisição falhar;
 Bibliotecas utilizadas: 
 * Express; 
 * -D nodemon ( utilizando o -D para dependência de desenvolvimento)
+* Date-fns

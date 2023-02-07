@@ -8,6 +8,6 @@ module.exports = {
     },
     account: [],
     withdraw: [],   //saque
-    deposit: [],    //deposito
+    deposit: [],
     transfers: []
 }

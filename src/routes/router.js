@@ -1,14 +1,15 @@
 const express = require('express');
 const { listAccounts, newAccounts, updateAccount, deleteAccount, balance, extract } = require('../controller/account');
 const { newDeposit, newWithdraw, newTransfers } = require('../controller/transactions');
+const { authenticationNewAccount, authenticationListAccount, authenticationUpdateAccount, authenticationBalanceAccount, authenticationExtractAccount, authenticationDeleteAccount } = require('../intermediary/authentication');
 const router = express();
 
-router.get('/accounts', listAccounts);
-router.get('/accounts/balance', balance);
-router.get('/accounts/extract', extract);
-router.post('/accounts', newAccounts);
-router.put('/accounts/:numberAccount/user', updateAccount);
-router.delete('/accounts/:numberAccount', deleteAccount);
+router.post('/accounts', authenticationNewAccount, newAccounts);
+router.get('/accounts', authenticationListAccount, listAccounts);
+router.put('/accounts/:numberAccount/user', authenticationUpdateAccount, updateAccount);
+router.get('/accounts/balance', authenticationBalanceAccount, balance);
+router.get('/accounts/extract', authenticationExtractAccount, extract);
+router.delete('/accounts/:numberAccount', authenticationDeleteAccount, deleteAccount);
 
 router.post('/transactions/deposit', newDeposit);
 router.post('/transactions/withdraw', newWithdraw);

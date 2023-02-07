@@ -2,40 +2,73 @@ let { bank, account } = require('../database');
 const { validateCPF } = require("../functions/validateCPF");
 const { validateEmail } = require("../functions/validateEmail");
 
-const authenticationNewAccount = async (req, res, next) => {
-    const { name, email, cpf, birthdate, phone, password } = req.body
+// const authenticationNewAccount = async (req, res, next) => {
+//     const { name, email, cpf, birthdate, phone, password } = req.body
+//     // const testeValidação = arrayDados => (req, res, next) => {
+//     //     for (const itens of arrayDados) {
+//     //         return res.status(400).json({ message: `O campo ${itens}é obrigatório` })
+//     //     }
+//     //     next();
+//     // }
 
-    if (!name) {
-        return res.status(400).json({ message: 'O campo nome deve ser preenchido' })
-    }
+//     // testeValidação([name, email, cpf, birthdate, phone, password]);
 
-    if (typeof name !== 'string') {
-        return res.status(400).json({ message: 'O campo nome deve conter apenas letras' })
-    }
 
-    if (!email) {
-        return res.status(400).json({ message: 'O campo email deve ser preenchido' })
-    }
-    if (validateEmail(email))
+//     if (!name) {
+//         return res.status(400).json({ message: 'O campo nome deve ser preenchido' })
+//     }
 
-        if (!cpf) {
-            return res.status(400).json({ message: 'O campo cpf deve ser preenchido' })
+//     if (typeof name !== 'string') {
+//         return res.status(400).json({ message: 'O campo nome deve conter apenas letras' })
+//     }
+
+//     if (!email) {
+//         return res.status(400).json({ message: 'O campo email deve ser preenchido' })
+//     }
+//     // if (validateEmail(email))
+
+//     if (!cpf) {
+//         return res.status(400).json({ message: 'O campo cpf deve ser preenchido' })
+//     }
+
+//     if (!birthdate) {
+//         return res.status(400).json({ message: 'O campo aniversário deve ser preenchido' })
+//     }
+
+//     if (!phone) {
+//         return res.status(400).json({ message: 'O campo telefone deve ser preenchido' })
+//     }
+
+//     if (!password) {
+//         return res.status(400).json({ message: 'O campo senha deve ser preenchido' })
+//     }
+//     if (!validateCPF(cpf)) {
+//         return res.status(400).json({ messagem: "CPF inválido" })
+//     }
+
+//     if (password.length < 6) {
+//         return res.status(400).json({ message: 'O campo senha deve conter no mínimo 06 dígitos' })
+//     }
+
+//     const verifyEmailCpf = account.find(selectAccount => {
+//         return selectAccount.user.cpf === cpf || selectAccount.user.email === email
+//     });
+
+//     if (verifyEmailCpf) {
+//         return res.status(400).json({ message: 'Cpf ou Email já cadastrado' })
+//     }
+
+//     next()
+// }
+const authenticationNewAccount = arrayDados => (req, res, next) => {
+    const { email, cpf, password } = req.body
+    for (const itens of arrayDados) {
+        if (!req.body[itens]) {
+            return res.status(400).json({ message: `O campo ${itens} é obrigatório` })
         }
-
+    }
     if (!validateCPF(cpf)) {
         return res.status(400).json({ messagem: "CPF inválido" })
-    }
-
-    if (!birthdate) {
-        return res.status(400).json({ message: 'O campo aniversário deve ser preenchido' })
-    }
-
-    if (!phone) {
-        return res.status(400).json({ message: 'O campo telefone deve ser preenchido' })
-    }
-
-    if (!password) {
-        return res.status(400).json({ message: 'O campo senha deve ser preenchido' })
     }
 
     if (password.length < 6) {
@@ -49,9 +82,10 @@ const authenticationNewAccount = async (req, res, next) => {
     if (verifyEmailCpf) {
         return res.status(400).json({ message: 'Cpf ou Email já cadastrado' })
     }
-
-    next()
+    next();
 }
+
+
 const authenticationListAccount = async (req, res, next) => {
     const { password } = req.query
     if (!password || password !== bank.password) {

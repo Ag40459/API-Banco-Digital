@@ -1,6 +1,6 @@
-function validateEmail(field) {
-    usuario = field.value.substring(0, field.value.indexOf("@"));
-    dominio = field.value.substring(field.value.indexOf("@") + 1, field.value.length);
+function validateEmail(emmail) {
+    usuario = emmail.value.substring(0, emmail.value.indexOf("@"));
+    dominio = emmail.value.substring(emmail.value.indexOf("@") + 1, emmail.value.length);
 
     if ((usuario.length >= 1) &&
         (dominio.length >= 3) &&

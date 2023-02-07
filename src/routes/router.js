@@ -4,7 +4,7 @@ const { newDeposit, newWithdraw, newTransfers } = require('../controller/transac
 const { authenticationNewAccount, authenticationListAccount, authenticationUpdateAccount, authenticationBalanceAccount, authenticationExtractAccount, authenticationDeleteAccount, authenticationTransactionsDeposit, authenticationTransactionsWithdraw, authenticationTransactionsTranfers } = require('../intermediary/authentication');
 const router = express();
 
-router.post('/accounts', authenticationNewAccount, newAccounts);
+router.post('/accounts', authenticationNewAccount(['name', 'email', 'cpf', 'birthdate', 'phone', 'password']), newAccounts);
 router.get('/accounts', authenticationListAccount, listAccounts);
 router.put('/accounts/:numberAccount/user', authenticationUpdateAccount, updateAccount);
 router.get('/accounts/balance', authenticationBalanceAccount, balance);

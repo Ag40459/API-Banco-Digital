@@ -43,7 +43,7 @@ const updateAccount = (req, res) => {
 }
 const balance = (req, res) => {
 
-    return res.status(200).json("Saldo :" + Number(verifyNumberAccount.balance))
+    return res.status(200).json(`Saldo : + {Number(verifyNumberAccount.balance})`)
 }
 const extract = (req, res) => {
     const { numberAccount, password } = req.query

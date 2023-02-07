@@ -3,17 +3,6 @@ const { format } = require('date-fns')
 
 const newDeposit = (req, res) => {
     const { numberAccount, value } = req.body;
-    if (!numberAccount || !value) {
-        res.status(400).json({ message: "Número da conta ou Valor inválido" })
-    }
-
-    const verifyAccount = account.find(selectAccount => selectAccount.number === Number(numberAccount));
-    if (!verifyAccount) {
-        return res.status(404).json({ message: 'Conta não encontrada' })
-    }
-    if (value <= 0) {
-        res.status(400).json({ message: "Valor tem que ser superior a R$ 0,00" })
-    }
 
     verifyAccount.balance += Number(value);
 
@@ -28,20 +17,8 @@ const newDeposit = (req, res) => {
 }
 
 const newWithdraw = (req, res) => {
-    const { numberAccount, value, password } = req.body;
-    if (!numberAccount || !value || !password) {
-        res.status(400).json({ message: "Número da conta, valor ou password é inválido" })
-    }
-    const verifyAccount = account.find(selectAccount => selectAccount.number === Number(numberAccount));
-    if (!verifyAccount) {
-        return res.status(404).json({ message: 'Conta não encontrada' })
-    }
-    if (verifyAccount.user.password !== password) {
-        res.status(400).json({ message: "Senha incorreta" })
-    }
-    if (verifyAccount.balance < value) {
-        res.status(404).json({ message: "Saldo insuficiente" })
-    }
+    const { numberAccount, value } = req.body;
+
     verifyAccount.balance -= Number(value)
 
     const register = {

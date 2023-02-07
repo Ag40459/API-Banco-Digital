@@ -51,7 +51,6 @@ const authenticationNewAccount = async (req, res, next) => {
 
     next()
 }
-
 const authenticationListAccount = async (req, res, next) => {
     const { password } = req.query
     if (!password || password !== bank.password) {
@@ -167,13 +166,94 @@ const authenticationDeleteAccount = async (req, res, next) => {
     if (verifyNumberAccount.balance > 0) {
         return res.status(403).json({ message: "Conta não excluida, Saldo precisa ser R$ 0,00" })
     }
+    next()
 }
+const authenticationTransactionsDeposit = async (req, res, next) => {
+    const { numberAccount, value } = req.body;
+    if (!numberAccount) {
+        res.status(400).json({ message: "Campo conta deve ser preenchido" })
+    }
+    if (!value) {
+        res.status(400).json({ message: "Campo valor deve ser preenchido" })
+    }
+    const verifyAccount = account.find(selectAccount => selectAccount.number === Number(numberAccount));
+    if (!verifyAccount) {
+        return res.status(404).json({ message: 'Conta não encontrada' })
+    }
+    if (value <= 0) {
+        res.status(400).json({ message: "Valor tem que ser superior a R$ 0,00" })
+    }
 
+    next()
+}
+const authenticationTransactionsWithdraw = async (req, res, next) => {
+    const { numberAccount, value, password } = req.body;
+    if (!numberAccount) {
+        res.status(400).json({ message: "Campo conta deve ser preenchido" })
+    }
+    if (!value) {
+        res.status(400).json({ message: "Campo valor deve ser preenchido" })
+    }
+    if (!password) {
+        res.status(400).json({ message: "Campo senha deve ser preenchido" })
+    }
+    const verifyAccount = account.find(selectAccount => selectAccount.number === Number(numberAccount));
+    if (!verifyAccount) {
+        return res.status(404).json({ message: 'Conta não encontrada' })
+    }
+    if (verifyAccount.user.password !== password) {
+        res.status(400).json({ message: "Senha incorreta" })
+    }
+    if (value <= 0) {
+        res.status(400).json({ message: "Valor tem que ser superior a R$ 0,00" })
+    }
+    if (verifyAccount.balance < value) {
+        res.status(404).json({ message: "Saldo insuficiente" })
+    }
+
+    next()
+}
+const authenticationTransactionsTranfers = async (req, res, next) => {
+    const { numberAccountOrigin, numberAccountDestiny, value, password } = req.body;
+    if (!value) {
+        res.status(400).json({ message: "Campo valor deve ser preenchido" })
+    }
+    if (!password) {
+        res.status(400).json({ message: "Campo senha deve ser preenchido" })
+    }
+    if (!numberAccountOrigin) {
+        res.status(400).json({ message: "Campo número da conta de origem deve ser preenchido" })
+    }
+    if (!numberAccountDestiny) {
+        res.status(400).json({ message: "Campo número da conta de destino deve ser preenchido" })
+    }
+    const verifyAccountOrigin = account.find(selectAccount => selectAccount.number === Number(numberAccountOrigin));
+    if (!verifyAccountOrigin) {
+        return res.status(404).json({ message: 'Conta de origem não encontrada' })
+    }
+    const verifyAccountDestiny = account.find(selectAccount => selectAccount.number === Number(numberAccountDestiny));
+    if (!verifyAccountDestiny) {
+        return res.status(404).json({ message: 'Conta de destino não encontrada' })
+    }
+    if (verifyAccountOrigin.user.password !== password) {
+        return res.status(404).json({ message: "Senha não confere" })
+    }
+    if (value <= 0) {
+        res.status(400).json({ message: "Valor tem que ser superior a R$ 0,00" })
+    }
+    if (verifyAccountOrigin.balance < value) {
+        res.status(404).json({ message: "Saldo insuficiente" })
+    }
+    next()
+}
 module.exports = {
     authenticationNewAccount,
     authenticationListAccount,
     authenticationUpdateAccount,
     authenticationBalanceAccount,
     authenticationExtractAccount,
-    authenticationDeleteAccount
+    authenticationDeleteAccount,
+    authenticationTransactionsDeposit,
+    authenticationTransactionsWithdraw,
+    authenticationTransactionsTranfers
 }

@@ -2,7 +2,6 @@ let { account, idSerial, withdraw, deposit, transfers } = require('../database')
 
 const newAccounts = (req, res) => {
     const { name, email, cpf, birthdate, phone, password } = req.body
-
     const newAccount = {
         number: idSerial++,
         balance: 0,
@@ -15,19 +14,16 @@ const newAccounts = (req, res) => {
             password
         }
     }
-
     account.push(newAccount);
-
     return res.status(201).json(newAccount);
-
 }
 const listAccounts = (req, res) => {
 
     return res.json(account);
 }
 const updateAccount = (req, res) => {
-    const { name, email, cpf, birthdate, phone, password } = req.body
-
+    const { name, email, cpf, birthdate, phone, password } = req.body;
+    const { numberAccount } = req.params;
     const verifyNumberAccount = account.find(selectAccount => selectAccount.number === Number(numberAccount));
 
     verifyNumberAccount.user = {
@@ -38,12 +34,12 @@ const updateAccount = (req, res) => {
         phone,
         password
     }
-
     return res.status(200).json(verifyNumberAccount.user);
 }
 const balance = (req, res) => {
-
-    return res.status(200).json(`Saldo : + {Number(verifyNumberAccount.balance})`)
+    const { numberAccount } = req.query
+    const verifyNumberAccount = account.find(selectAccount => selectAccount.number === Number(numberAccount));
+    return res.status(200).json((verifyNumberAccount.balance).toFixed(2).replace('.', ','));
 }
 const extract = (req, res) => {
     const { numberAccount, password } = req.query
@@ -78,7 +74,6 @@ const deleteAccount = (req, res) => {
     account = account.filter(selectAccount => Number(selectAccount.number) !== Number(numberAccount));
 
     return res.status(200).json({ message: "Conta excluida com sucesso!" })
-
 }
 
 module.exports = {

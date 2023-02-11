@@ -69,3 +69,4 @@ Bibliotecas utilizadas:
 * Express; 
 * -D nodemon ( utilizando o -D para dependência de desenvolvimento)
 * Date-fns
+* Joi

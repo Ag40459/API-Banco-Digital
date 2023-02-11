@@ -7,7 +7,7 @@ module.exports = {
         password: 'Cubos123Bank'
     },
     account: [],
-    withdraw: [],   //saque
+    withdraw: [],
     deposit: [],
     transfers: []
 }

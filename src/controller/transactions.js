@@ -3,6 +3,7 @@ const { format } = require('date-fns')
 
 const newDeposit = (req, res) => {
     const { numberAccount, value } = req.body;
+    const verifyAccount = account.find(selectAccount => selectAccount.number === Number(numberAccount));
 
     verifyAccount.balance += Number(value);
 
@@ -18,6 +19,7 @@ const newDeposit = (req, res) => {
 
 const newWithdraw = (req, res) => {
     const { numberAccount, value } = req.body;
+    const verifyAccount = account.find(selectAccount => selectAccount.number === Number(numberAccount));
 
     verifyAccount.balance -= Number(value)
 

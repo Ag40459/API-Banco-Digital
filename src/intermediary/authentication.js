@@ -1,196 +1,112 @@
 let { bank, account } = require('../database');
 const { validateCPF } = require("../functions/validateCPF");
-const { validateEmail } = require("../functions/validateEmail");
 
-// const authenticationNewAccount = async (req, res, next) => {
-//     const { name, email, cpf, birthdate, phone, password } = req.body
-//     // const testeValidação = arrayDados => (req, res, next) => {
-//     //     for (const itens of arrayDados) {
-//     //         return res.status(400).json({ message: `O campo ${itens}é obrigatório` })
-//     //     }
-//     //     next();
-//     // }
+const authenticationNewAccount = joiSchema => async (req, res, next) => {
+    const { email, cpf } = req.body
 
-//     // testeValidação([name, email, cpf, birthdate, phone, password]);
+    try {
+        await joiSchema.validateAsync(req.body);
+        const verifyCpfAccount = account.find(selectAccount => {
+            return selectAccount.user.cpf === cpf
+        });
+        const verifyEmailAccount = account.find(selectAccount => {
+            return selectAccount.user.email === email
+        });
 
-
-//     if (!name) {
-//         return res.status(400).json({ message: 'O campo nome deve ser preenchido' })
-//     }
-
-//     if (typeof name !== 'string') {
-//         return res.status(400).json({ message: 'O campo nome deve conter apenas letras' })
-//     }
-
-//     if (!email) {
-//         return res.status(400).json({ message: 'O campo email deve ser preenchido' })
-//     }
-//     // if (validateEmail(email))
-
-//     if (!cpf) {
-//         return res.status(400).json({ message: 'O campo cpf deve ser preenchido' })
-//     }
-
-//     if (!birthdate) {
-//         return res.status(400).json({ message: 'O campo aniversário deve ser preenchido' })
-//     }
-
-//     if (!phone) {
-//         return res.status(400).json({ message: 'O campo telefone deve ser preenchido' })
-//     }
-
-//     if (!password) {
-//         return res.status(400).json({ message: 'O campo senha deve ser preenchido' })
-//     }
-//     if (!validateCPF(cpf)) {
-//         return res.status(400).json({ messagem: "CPF inválido" })
-//     }
-
-//     if (password.length < 6) {
-//         return res.status(400).json({ message: 'O campo senha deve conter no mínimo 06 dígitos' })
-//     }
-
-//     const verifyEmailCpf = account.find(selectAccount => {
-//         return selectAccount.user.cpf === cpf || selectAccount.user.email === email
-//     });
-
-//     if (verifyEmailCpf) {
-//         return res.status(400).json({ message: 'Cpf ou Email já cadastrado' })
-//     }
-
-//     next()
-// }
-const authenticationNewAccount = arrayDados => (req, res, next) => {
-    const { email, cpf, password } = req.body
-    for (const itens of arrayDados) {
-        if (!req.body[itens]) {
-            return res.status(400).json({ message: `O campo ${itens} é obrigatório` })
+        if (verifyCpfAccount) {
+            return res.status(400).json({ messagem: "Cpf já está cadastrado em outra conta" })
         }
-    }
-    if (!validateCPF(cpf)) {
-        return res.status(400).json({ messagem: "CPF inválido" })
+
+        if (verifyEmailAccount) {
+            return res.status(400).json({ messagem: "Email já está cadastrado em outra conta" })
+        }
+        if (!validateCPF(cpf)) {
+            return res.status(400).json({ message: 'O número do Cpf não é válido' })
+        }
+        next();
+    } catch (error) {
+        return res.status(400).json({ message: error.message });
     }
 
-    if (password.length < 6) {
-        return res.status(400).json({ message: 'O campo senha deve conter no mínimo 06 dígitos' })
-    }
-
-    const verifyEmailCpf = account.find(selectAccount => {
-        return selectAccount.user.cpf === cpf || selectAccount.user.email === email
-    });
-
-    if (verifyEmailCpf) {
-        return res.status(400).json({ message: 'Cpf ou Email já cadastrado' })
-    }
-    next();
 }
-
-
 const authenticationListAccount = async (req, res, next) => {
-    const { password } = req.query
+    const { password } = req.body
+
+    if (!password) {
+        return res.status(400).json({ message: 'O campo senha é obrigatório!' })
+    }
     if (!password || password !== bank.password) {
         return res.status(400).json({ message: 'Login ou senha inválido!' })
     }
-
     next()
 }
-const authenticationUpdateAccount = async (req, res, next) => {
-    const { name, email, cpf, birthdate, phone, password } = req.body
+const authenticationUpdateAccount = joiSchema => async (req, res, next) => {
+    const { email, cpf } = req.body
     const { numberAccount } = req.params;
-
     const verifyNumberAccount = account.find(selectAccount => selectAccount.number === Number(numberAccount));
-    if (!verifyNumberAccount) {
-        return res.status(404).json({ message: 'Conta não encontrada' })
-    }
 
-    if (!name) {
-        return res.status(400).json({ message: 'O campo nome deve ser preenchido' })
-    }
-
-    if (typeof name !== 'string') {
-        return res.status(400).json({ message: 'O campo nome deve conter apenas letras' })
-    }
-
-    if (!email) {
-        return res.status(400).json({ message: 'O campo email deve ser preenchido' })
-    }
-    if (validateEmail(email))
-
-        if (!cpf) {
-            return res.status(400).json({ message: 'O campo cpf deve ser preenchido' })
+    try {
+        if (!verifyNumberAccount) {
+            return res.status(404).json({ message: 'Conta não encontrada' })
         }
-
-    if (!validateCPF(cpf)) {
-        return res.status(400).json({ messagem: "CPF inválido" })
-    }
-
-    if (!birthdate) {
-        return res.status(400).json({ message: 'O campo aniversário deve ser preenchido' })
-    }
-
-    if (!phone) {
-        return res.status(400).json({ message: 'O campo telefone deve ser preenchido' })
-    }
-
-    if (!password) {
-        return res.status(400).json({ message: 'O campo senha deve ser preenchido' })
-    }
-
-    if (password.length < 6) {
-        return res.status(400).json({ message: 'O campo senha deve conter no mínimo 06 dígitos' });
-    }
-
-    if (cpf !== verifyNumberAccount.user.cpf) {
-        const verifyCpf = account.find(selectAccount => selectAccount.user.cpf === cpf);
-        if (verifyCpf) {
-            return res.status(400).json({ messagem: "Cpf já está cadastrado em outra conta" })
+        await joiSchema.validateAsync(req.body);
+        if (!validateCPF(cpf)) {
+            return res.status(400).json({ messagem: "CPF inválido" });
         }
-    }
-
-    if (email !== verifyNumberAccount.user.email) {
-        const verifyemail = account.find(selectAccount => selectAccount.user.email === email);
-        if (verifyemail) {
-            return res.status(400).json({ messagem: "Email já está cadastrado em outra conta" })
+        if (cpf !== verifyNumberAccount.user.cpf) {
+            const verifyCpf = account.find(selectAccount => selectAccount.user.cpf === cpf);
+            if (verifyCpf) {
+                return res.status(400).json({ messagem: "Cpf já está cadastrado em outra conta" })
+            }
         }
-    }
-    next();
+        if (email !== verifyNumberAccount.user.email) {
+            const verifyemail = account.find(selectAccount => selectAccount.user.email === email);
+            if (verifyemail) {
+                return res.status(400).json({ messagem: "Email já está cadastrado em outra conta" })
+            }
+        }
+        next();
 
+    } catch (error) {
+        return res.status(400).json({ message: error.message })
+    }
 }
-const authenticationBalanceAccount = async (req, res, next) => {
+const authenticationBalanceAccount = joiSchema => async (req, res, next) => {
     const { numberAccount, password } = req.query
 
-    if (!numberAccount) {
-        return res.status(400).json({ message: 'O campo número da conta deve ser preenchido' })
-    }
-    if (!password) {
-        return res.status(400).json({ message: 'O campo senha deve ser preenchido' })
-    }
-    if (password !== verifyNumberAccount.user.password) {
-        return res.status(400).json({ message: 'Login ou senha inválido!' })
-    }
-    const verifyNumberAccount = account.find(selectAccount => selectAccount.number === Number(numberAccount));
-    if (!verifyNumberAccount) {
-        return res.status(404).json({ message: 'Conta não encontrada' })
+    try {
+        await joiSchema.validateAsync(req.query);
+        const verifyNumberAccount = account.find(selectAccount => selectAccount.number === Number(numberAccount));
+        if (!verifyNumberAccount) {
+            return res.status(404).json({ message: 'Conta não encontrada' })
+        }
+        if (password !== verifyNumberAccount.user.password) {
+            return res.status(400).json({ message: 'Login ou senha inválido!' })
+        }
+
+    } catch (error) {
+        return res.status(400).json({ message: error.message });
     }
     next();
 }
-const authenticationExtractAccount = async (req, res, next) => {
+const authenticationExtractAccount = joiSchema => async (req, res, next) => {
     const { numberAccount, password } = req.query
-    if (!numberAccount) {
-        return res.status(400).json({ message: 'O campo número da conta deve ser preenchido' })
-    }
-    if (!password) {
-        return res.status(400).json({ message: 'O campo senha deve ser preenchido' })
-    }
-    const verifyNumberAccount = account.find(selectAccount => selectAccount.number === Number(numberAccount));
-    if (!verifyNumberAccount) {
-        return res.status(404).json({ message: 'Conta não encontrada' })
-    }
-    if (password !== verifyNumberAccount.user.password) {
-        return res.status(400).json({ message: 'Login ou senha inválido!' })
+
+    try {
+        await joiSchema.validateAsync(req.query);
+        const verifyNumberAccount = account.find(selectAccount => selectAccount.number === Number(numberAccount));
+        if (!verifyNumberAccount) {
+            return res.status(404).json({ message: 'Conta não encontrada' })
+        }
+        if (password !== verifyNumberAccount.user.password) {
+            return res.status(400).json({ message: 'Login ou senha inválido!' })
+        }
+
+        next();
+    } catch (error) {
+        return res.status(400).json({ message: error.message });
     }
 
-    next();
 }
 const authenticationDeleteAccount = async (req, res, next) => {
     const { numberAccount } = req.params;

@@ -8,7 +8,7 @@ Será possível:
  - Cpf será aceito apenas cpfs válidos e ele é único;
  - Data de aniversário no formato dd/MM/yyyy;
  - Telefone será necessário informar ddd com 02 dígitos e o telefone com 09  digitos;
- - Senha terá que conter no mínimo de 06 caracteres sendo no mínimo com 01 letra maiúscula e no mínimo 01 caractér especial;
+ - Senha terá que conter no mínimo de 06 caracteres;;
  - Será mostrado em tela um array com todos os dados do novo cadastro;
 
 * Atualizar Contas:

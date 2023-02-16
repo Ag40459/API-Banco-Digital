@@ -2,9 +2,9 @@
   "name": "api-banco-digital",
   "version": "1.0.0",
   "description": "Será possível: * Criar conta; * Listar contas; * Excluir uma conta; * Depositar em uma conta; * Sacar de uma conta; * Transferência entre conta dos usuários; Consultar saldo; * Consultar extrato; * Atualizar usuário;",
-  "main": "./src/index.js",
+  "main": "./index.js",
   "scripts": {
-    "dev": "nodemon ./index.js"
+    "dev": "nodemon ./index.js",
   },
   "repository": {
     "type": "git",

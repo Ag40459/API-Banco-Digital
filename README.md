@@ -70,3 +70,6 @@ Bibliotecas utilizadas:
 * -D nodemon ( utilizando o -D para dependência de desenvolvimento)
 * Date-fns
 * Joi
+* Kenex
+* Build
+* 

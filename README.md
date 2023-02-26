@@ -72,4 +72,6 @@ Bibliotecas utilizadas:
 * Joi
 * Kenex
 * Build
-* 
+* Node
+* Bcrypt
+* Dotenv

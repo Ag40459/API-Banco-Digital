@@ -1,7 +1,7 @@
 let { account, idSerial, withdraw, deposit, transfers } = require('../database');
 const bcrypt = require('bcrypt');
 
-const newAccounts = (req, res) => {
+const newAccounts = async (req, res) => {
     const { name, email, cpf, birthdate, phone, password } = req.body
     const encryptedPassword = await bcrypt.hash(password, 10);
     const newAccount = {
@@ -23,7 +23,7 @@ const listAccounts = (req, res) => {
 
     return res.json(account);
 }
-const updateAccount = (req, res) => {
+const updateAccount = async (req, res) => {
     const { name, email, cpf, birthdate, phone, password } = req.body;
     const { numberAccount } = req.params;
     const verifyNumberAccount = account.find(selectAccount => selectAccount.number === Number(numberAccount));

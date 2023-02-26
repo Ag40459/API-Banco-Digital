@@ -75,3 +75,4 @@ Bibliotecas utilizadas:
 * Node
 * Bcrypt
 * Dotenv
+* Cors

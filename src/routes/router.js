@@ -5,6 +5,9 @@ const { authenticationNewAccount, authenticationListAccount, authenticationUpdat
 const { schemesAccounts, schemesAccountsNumberpassword } = require('../validations/schemesAccounts');
 const router = express();
 
+router.post('/', (req, res) => {
+    return res.status(201).json({ mensagem: "OK" });
+});
 router.post('/accounts', authenticationNewAccount(schemesAccounts), newAccounts);
 router.get('/accounts', authenticationListAccount, listAccounts);
 router.put('/accounts/:numberAccount/user', authenticationUpdateAccount(schemesAccounts), updateAccount);
